@@ -1,0 +1,60 @@
+<svg width="250" height="250" viewBox="0 0 250 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Degradado púrpura neón underground -->
+    <linearGradient id="cyberPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d8b4fe" />
+      <stop offset="40%" stop-color="#a855f7" />
+      <stop offset="100%" stop-color="#6b21a8" />
+    </linearGradient>
+
+    <!-- Resplandor neón oscuro -->
+    <filter id="neonGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <!-- Trama de líneas Cyber / Grid de fondo -->
+    <pattern id="gridPattern" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#a855f7" stroke-width="0.5" stroke-opacity="0.15" />
+    </pattern>
+  </defs>
+
+  <!-- Base / Tarjeta oscura -->
+  <rect width="250" height="250" rx="36" fill="#08090d" />
+  
+  <!-- Cuadrícula discreta de fondo -->
+  <rect width="250" height="250" rx="36" fill="url(#gridPattern)" />
+
+  <!-- Borde de marco fino con brillo sutil -->
+  <rect width="248" height="248" x="1" y="1" rx="35" fill="none" stroke="url(#cyberPurple)" stroke-width="1.5" stroke-opacity="0.4" />
+
+  <!-- Capa de sombra neón proyectada -->
+  <g filter="url(#neonGlow)" opacity="0.45" stroke="#a855f7" stroke-width="12" stroke-linecap="square" fill="none">
+    <!-- G -->
+    <path d="M 95 85 H 65 V 160 H 105 V 120 H 85" />
+    <!-- P -->
+    <path d="M 125 160 V 85 H 165 C 180 85 180 120 165 120 H 125" />
+    <!-- Cierre /> -->
+    <path d="M 175 135 L 195 148 L 175 161" stroke-width="8" />
+  </g>
+
+  <!-- TRAZADOS PRINCIPALES (LETRAS GP + CÓDIGO /> HI PERDEFINIDOS) -->
+  <g stroke="url(#cyberPurple)" stroke-linecap="square" stroke-linejoin="miter" fill="none">
+    
+    <!-- LETRA G (Trazo brutalista y limpio) -->
+    <path d="M 100 85 H 60 V 165 H 105 V 122 H 85" stroke-width="12" />
+
+    <!-- LETRA P (Integrada) -->
+    <path d="M 125 165 V 85 H 165 C 182 85 182 122 165 122 H 125" stroke-width="12" />
+
+    <!-- SÍMBOLO DE CÓDIGO SUCK / SLASH DE CORTE EN LA P ("/") -->
+    <line x1="120" y1="170" x2="135" y2="80" stroke="#c084fc" stroke-width="4" stroke-linecap="round" />
+
+    <!-- SÍMBOLO DE CIERRE ">" UNDERGROUND -->
+    <path d="M 175 132 L 195 148 L 175 164" stroke="#e9d5ff" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter" />
+    
+  </g>
+
+  <!-- Detalle terminal dev (Punto parpadeante de consola) -->
+  <rect x="202" y="158" width="6" height="8" fill="#a855f7" />
+</svg>
