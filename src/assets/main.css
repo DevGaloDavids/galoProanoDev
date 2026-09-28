@@ -16,3 +16,21 @@ body {
 *, *::before, *::after {
   box-sizing: border-box;
 }
+
+/* Estado por defecto: sección fuera de foco */
+.scroll-section {
+  opacity: 0.25;
+  filter: blur(4px);
+  transform: scale(0.98);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, filter, transform;
+}
+
+/* Estado activo: sección en el centro de la pantalla */
+.scroll-section.is-active {
+  opacity: 1;
+  filter: blur(0px);
+  transform: scale(1);
+}

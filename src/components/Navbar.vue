@@ -4,7 +4,7 @@ import { ref } from 'vue'
 const isMenuOpen = ref(false)
 
 const navLinks = [
-  { name: 'Sobre Mí', href: '#sobre-mi' },
+  { name: 'Sobre mí', href: '#sobre-mi' },
   { name: 'Experiencia', href: '#experiencia' },
   { name: 'Formación', href: '#formacion' },
   { name: 'Contacto', href: '#contacto' }
