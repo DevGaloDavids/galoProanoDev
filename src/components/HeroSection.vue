@@ -15,7 +15,7 @@
 
 <style scoped>
 .hero {
-  min-height: 85vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
