@@ -97,7 +97,21 @@ onUnmounted(() => {
     <!-- Teleport manda el overlay directamente al body para difuminar TODA la pantalla -->
     <Teleport to="body">
       <transition name="fade">
-        <div v-if="isMenuOpen" class="mobile-overlay-dim" @click="closeMenu"></div>
+        <div 
+          v-if="isMenuOpen" 
+          class="mobile-overlay-dim"
+          :style="{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          backgroundColor: 'rgba(3, 5, 8, 0.75)',
+          backdropFilter: 'blur(12px) brightness(0.6)',
+          webkitBackdropFilter: 'blur(12px) brightness(0.6)',
+          zIndex: 999
+      }" 
+          @click="closeMenu"></div>
       </transition>
     </Teleport>
   </header>
