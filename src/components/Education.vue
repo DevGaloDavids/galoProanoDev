@@ -85,7 +85,7 @@
   font-size: 2rem;
   color: #f8fafc;
   margin-bottom: 2.5rem;
-  border-left: 4px solid #1d4ed8; /* Azul corporativo GFT */
+  border-left: 4px solid #8644f0; /* Azul corporativo GFT */
   padding-left: 1rem;
 }
 

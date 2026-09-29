@@ -183,7 +183,7 @@ const experiences = ref([
   font-size: 2rem;
   color: #f8fafc;
   margin-bottom: 2.5rem;
-  border-left: 4px solid #38bdf8;
+  border-left: 4px solid #a855f7;
   padding-left: 1rem;
 }
 
@@ -194,14 +194,14 @@ const experiences = ref([
   padding: 2.5rem 0;
   margin-bottom: 2rem;
   scrollbar-width: thin;
-  scrollbar-color: #38bdf8 #080c14;
+  scrollbar-color: #a855f7 #080c14;
 }
 
 .timeline-wrapper::-webkit-scrollbar {
   height: 6px;
 }
 .timeline-wrapper::-webkit-scrollbar-thumb {
-  background: #38bdf8;
+  background: #a855f7;
   border-radius: 4px;
 }
 
@@ -221,8 +221,8 @@ const experiences = ref([
   left: 0;
   right: 0;
   height: 3px;
-  background: #0284c7;
-  box-shadow: 0 0 12px #38bdf8, 0 0 20px #0284c7;
+  background: #a855f7;
+  box-shadow: 0 0 12px #a855f7, 0 0 20px #a855f7;
   transform: translateY(-50%);
   z-index: 1;
 }
