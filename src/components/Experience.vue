@@ -456,6 +456,11 @@ const experiences = ref([
 /* Tarjeta Detalle */
 .detail-card-stage {
   display: grid;
+  margin-left: -1.5rem;
+  margin-right: -1.5rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  overflow: hidden;
 }
 
 .detail-card {
