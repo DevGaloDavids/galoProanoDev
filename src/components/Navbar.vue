@@ -124,7 +124,12 @@ onUnmounted(() => {
   left: 0;
   width: 100%;
   padding: 1.5rem 0;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-bottom: 1px solid transparent;
+  transition:
+    padding 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 0.3s ease,
+    backdrop-filter 0.3s ease,
+    border-color 0.3s ease;
   z-index: 1000;
 }
 
@@ -132,7 +137,7 @@ onUnmounted(() => {
   padding: 0.75rem 0;
   background-color: rgba(3, 5, 8, 0.75);
   backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+  border-color: rgba(168, 85, 247, 0.2);
 }
 
 .navbar-container {
@@ -240,12 +245,7 @@ onUnmounted(() => {
   justify-content: center;
   cursor: pointer;
   box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   z-index: 1002;
-}
-
-.bubble-toggle.is-active {
-  transform: rotate(90deg);
 }
 
 /* Acciones desplegables */
@@ -333,7 +333,18 @@ onUnmounted(() => {
 @media (max-width: 768px) {
   .desktop-nav { display: none; }
   .mobile-controls { display: block; }
-  .navbar-header { padding: 0.75rem 0; }
+  .navbar-header {
+    padding: 0.75rem 0;
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease;
+  }
+
+  .navbar-header.is-scrolled {
+    background-color: rgba(3, 5, 8, 0.92);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
 }
 </style>
 

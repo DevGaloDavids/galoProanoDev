@@ -42,42 +42,44 @@
       </div>
 
       <!-- Tarjeta Detalle de la Etapa Seleccionada -->
-      <transition :name="`slide-${transitionDirection}`" mode="out-in">
-        <div
-          class="detail-card"
-          :key="selectedIndex"
-          @touchstart.passive="handleTouchStart"
-          @touchend.passive="handleTouchEnd"
-          @touchcancel="clearTouchStart"
-        >
-          <div class="card-header">
-            <div>
-              <h3>{{ experiences[selectedIndex].role }}</h3>
-              <p class="subtitle">
-                <span class="company-highlight">{{ experiences[selectedIndex].company }}</span> 
-                <span> | Cliente: </span>
-                <span class="client-highlight">{{ experiences[selectedIndex].client }}</span>
-              </p>
+      <div class="detail-card-stage">
+        <transition :name="`slide-${transitionDirection}`">
+          <div
+            class="detail-card"
+            :key="selectedIndex"
+            @touchstart.passive="handleTouchStart"
+            @touchend.passive="handleTouchEnd"
+            @touchcancel="clearTouchStart"
+          >
+            <div class="card-header">
+              <div>
+                <h3>{{ experiences[selectedIndex].role }}</h3>
+                <p class="subtitle">
+                  <span class="company-highlight">{{ experiences[selectedIndex].company }}</span> 
+                  <span> | Cliente: </span>
+                  <span class="client-highlight">{{ experiences[selectedIndex].client }}</span>
+                </p>
+              </div>
+              <span class="duration-badge">{{ formatDuration(experiences[selectedIndex]) }}</span>
             </div>
-            <span class="duration-badge">{{ formatDuration(experiences[selectedIndex]) }}</span>
-          </div>
 
-          <div class="description" v-html="experiences[selectedIndex].description"></div>
+            <div class="description" v-html="experiences[selectedIndex].description"></div>
 
-          <div class="tech-stack">
-            <h4>Tecnologías utilizadas:</h4>
-            <div class="tags">
-              <span 
-                v-for="(tech, tIndex) in experiences[selectedIndex].technologies" 
-                :key="tIndex" 
-                class="tech-tag"
-              >
-                {{ tech }}
-              </span>
+            <div class="tech-stack">
+              <h4>Tecnologías utilizadas:</h4>
+              <div class="tags">
+                <span 
+                  v-for="(tech, tIndex) in experiences[selectedIndex].technologies" 
+                  :key="tIndex" 
+                  class="tech-tag"
+                >
+                  {{ tech }}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-      </transition>
+        </transition>
+      </div>
     </div>
   </section>
 </template>
@@ -89,6 +91,8 @@ const selectedIndex = ref(0)
 const transitionDirection = ref('next')
 const touchStart = ref(null)
 const timelineWrapper = ref(null)
+const timelineAnimationDuration = 450
+let timelineAnimationFrame = 0
 
 function centerTimelineNode(index) {
   const wrapper = timelineWrapper.value
@@ -99,11 +103,32 @@ function centerTimelineNode(index) {
   const nodeRect = node.getBoundingClientRect()
   const targetScroll = wrapper.scrollLeft + nodeRect.left - wrapperRect.left + nodeRect.width / 2 - wrapper.clientWidth / 2
   const maxScroll = wrapper.scrollWidth - wrapper.clientWidth
+  const startScroll = wrapper.scrollLeft
+  const endScroll = Math.max(0, Math.min(targetScroll, maxScroll))
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  wrapper.scrollTo({
-    left: Math.max(0, Math.min(targetScroll, maxScroll)),
-    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
-  })
+  cancelAnimationFrame(timelineAnimationFrame)
+
+  if (reduceMotion) {
+    wrapper.scrollLeft = endScroll
+    return
+  }
+
+  const startTime = performance.now()
+  const animateScroll = (currentTime) => {
+    const progress = Math.min((currentTime - startTime) / timelineAnimationDuration, 1)
+    const easedProgress = progress * progress * (3 - 2 * progress)
+
+    wrapper.scrollLeft = startScroll + (endScroll - startScroll) * easedProgress
+
+    if (progress < 1) {
+      timelineAnimationFrame = requestAnimationFrame(animateScroll)
+    } else {
+      timelineAnimationFrame = 0
+    }
+  }
+
+  timelineAnimationFrame = requestAnimationFrame(animateScroll)
 }
 
 function selectExperience(index) {
@@ -429,7 +454,13 @@ const experiences = ref([
 }
 
 /* Tarjeta Detalle */
+.detail-card-stage {
+  display: grid;
+}
+
 .detail-card {
+  grid-area: 1 / 1;
+  min-width: 0;
   background-color: #080c14;
   border: 1px solid rgba(56, 189, 248, 0.25);
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.9), 0 0 15px rgba(56, 189, 248, 0.05);
@@ -505,27 +536,29 @@ const experiences = ref([
 .slide-next-leave-active,
 .slide-previous-enter-active,
 .slide-previous-leave-active {
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition:
+    opacity 450ms cubic-bezier(0.33, 0, 0.67, 1),
+    transform 450ms cubic-bezier(0.33, 0, 0.67, 1);
 }
 
 .slide-next-enter-from {
   opacity: 0;
-  transform: translateX(32px);
+  transform: translateX(48px);
 }
 
 .slide-next-leave-to {
   opacity: 0;
-  transform: translateX(-32px);
+  transform: translateX(-48px);
 }
 
 .slide-previous-enter-from {
   opacity: 0;
-  transform: translateX(-32px);
+  transform: translateX(-48px);
 }
 
 .slide-previous-leave-to {
   opacity: 0;
-  transform: translateX(32px);
+  transform: translateX(48px);
 }
 
 @media (prefers-reduced-motion: reduce) {
