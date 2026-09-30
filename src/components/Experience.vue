@@ -31,10 +31,21 @@
 
             <!-- Cliente Abajo (Logo Prominente) -->
             <div class="node-bottom">
-              <div class="logo-box">
-                <img :src="item.clientLogo" :alt="item.client" class="logo logo-blend" />
+              <div class="logo-box" :class="{ 'client-logo-group': item.projects }">
+                <template v-if="item.projects">
+                  <img
+                    v-for="project in item.projects"
+                    :key="project.client"
+                    :src="project.clientLogo"
+                    :alt="project.client"
+                    class="logo logo-blend"
+                  />
+                </template>
+                <img v-else :src="item.clientLogo" :alt="item.client" class="logo logo-blend" />
               </div>
-              <span class="client-name">Cliente: {{ item.client }}</span>
+              <span class="client-name">
+                {{ item.projects ? item.projects.map(project => project.client).join(' · ') : `Cliente: ${item.client}` }}
+              </span>
               <span class="period-tag">{{ item.period }}</span>
             </div>
           </div>
@@ -56,27 +67,57 @@
                 <h3>{{ experiences[selectedIndex].role }}</h3>
                 <p class="subtitle">
                   <span class="company-highlight">{{ experiences[selectedIndex].company }}</span> 
-                  <span> | Cliente: </span>
-                  <span class="client-highlight">{{ experiences[selectedIndex].client }}</span>
+                  <template v-if="experiences[selectedIndex].projects">
+                    <span> | {{ experiences[selectedIndex].projects.length }} proyectos</span>
+                  </template>
+                  <template v-else>
+                    <span> | Cliente: </span>
+                    <span class="client-highlight">{{ experiences[selectedIndex].client }}</span>
+                  </template>
                 </p>
               </div>
               <span class="duration-badge">{{ formatDuration(experiences[selectedIndex]) }}</span>
             </div>
 
-            <div class="description" v-html="experiences[selectedIndex].description"></div>
-
-            <div class="tech-stack">
-              <h4>Tecnologías utilizadas:</h4>
-              <div class="tags">
-                <span 
-                  v-for="(tech, tIndex) in experiences[selectedIndex].technologies" 
-                  :key="tIndex" 
-                  class="tech-tag"
-                >
-                  {{ tech }}
-                </span>
+            <template v-if="experiences[selectedIndex].projects">
+              <section
+                v-for="project in experiences[selectedIndex].projects"
+                :key="project.client"
+                class="project-detail"
+              >
+                <div class="project-header">
+                  <div>
+                    <h4>{{ project.client }}</h4>
+                    <p class="project-role">{{ project.role }}</p>
+                  </div>
+                  <span class="project-period">{{ project.period }}</span>
+                </div>
+                <div class="description" v-html="project.description"></div>
+                <div class="tech-stack">
+                  <h4>Tecnologías utilizadas:</h4>
+                  <div class="tags">
+                    <span v-for="tech in project.technologies" :key="tech" class="tech-tag">
+                      {{ tech }}
+                    </span>
+                  </div>
+                </div>
+              </section>
+            </template>
+            <template v-else>
+              <div class="description" v-html="experiences[selectedIndex].description"></div>
+              <div class="tech-stack">
+                <h4>Tecnologías utilizadas:</h4>
+                <div class="tags">
+                  <span
+                    v-for="(tech, tIndex) in experiences[selectedIndex].technologies"
+                    :key="tIndex"
+                    class="tech-tag"
+                  >
+                    {{ tech }}
+                  </span>
+                </div>
               </div>
-            </div>
+            </template>
           </div>
         </transition>
       </div>
@@ -233,39 +274,41 @@ const experiences = ref([
   {
     company: 'Grupo GFT',
     companyLogo: '/logos/gft.png',
-    client: 'Mapfre',
-    clientLogo: '/logos/mapfre2.webp',
-    role: 'Front-End Developer',
+    role: 'Front-End & Full-stack Developer',
     startDate: '2021-04',
-    endDate: '2021-09',
-    period: 'Abr. 2021 - Sep. 2021',
-    description: `
-      <p class="mb-3">Consultoría y desarrollo de software para aseguradora a través de GFT. Participación en proyectos transversales el desarrollo frontend.</p>
-      <ul class="list-disc pl-5 space-y-1 text-sm text-slate-300">
-        <li>Desarrollo y mantenimiento de evolutivos sobre la plataforma de gestión interna de empleados/operadores.</li>
-        <li>Modernización y modificación de interfaces de usuario utilizando AngularJS, mejorando la usabilidad y la eficiencia operativa en entorno de producción.</li>
-      </ul>
-    `,
-    technologies: ['HTML/CSS', 'AngularJS', 'CSS', 'SQL']
-  },
-  {
-    company: 'Grupo GFT',
-    companyLogo: '/logos/gft.png',
-    client: 'BBVA',
-    clientLogo: '/logos/bbva.png',
-    role: 'Full-stack Developer',
-    startDate: '2021-09',
     endDate: '2024-01',
-    period: 'Sep. 2021 - Ene. 2024',
-    description: `
-      <p class="mb-3">Consultoría y desarrollo de software bancario a través de GFT. Participación en proyectos transversales el desarrollo backend.</p>
-      <ul class="list-disc pl-5 space-y-1 text-sm text-slate-300">
-        <li>Análisis e implementación de evolutivos complejos en producción sobre la arquitectura técnica de la entidad.</li>
-        <li>Desarrollo backend avanzado utilizando la arquitectura APX (Java) y la arquitectura previa LRBA.</li>
-        <li>Optimización y modelado de consultas en base de datos Oracle.</li>
-      </ul>
-    `,
-    technologies: ['Java', 'APX', 'LRBA']
+    period: 'Abr. 2021 - Ene. 2024',
+    projects: [
+      {
+        client: 'Mapfre',
+        clientLogo: '/logos/mapfre2.webp',
+        role: 'Front-End Developer',
+        period: 'Abr. 2021 - Sep. 2021',
+        description: `
+          <p class="mb-3">Consultoría y desarrollo de software para aseguradora a través de GFT. Participación en proyectos transversales el desarrollo frontend.</p>
+          <ul class="list-disc pl-5 space-y-1 text-sm text-slate-300">
+            <li>Desarrollo y mantenimiento de evolutivos sobre la plataforma de gestión interna de empleados/operadores.</li>
+            <li>Modernización y modificación de interfaces de usuario utilizando AngularJS, mejorando la usabilidad y la eficiencia operativa en entorno de producción.</li>
+          </ul>
+        `,
+        technologies: ['HTML/CSS', 'AngularJS', 'CSS', 'SQL']
+      },
+      {
+        client: 'BBVA',
+        clientLogo: '/logos/bbva.png',
+        role: 'Full-stack Developer',
+        period: 'Sep. 2021 - Ene. 2024',
+        description: `
+          <p class="mb-3">Consultoría y desarrollo de software bancario a través de GFT. Participación en proyectos transversales el desarrollo backend.</p>
+          <ul class="list-disc pl-5 space-y-1 text-sm text-slate-300">
+            <li>Análisis e implementación de evolutivos complejos en producción sobre la arquitectura técnica de la entidad.</li>
+            <li>Desarrollo backend avanzado utilizando la arquitectura APX (Java) y la arquitectura previa LRBA.</li>
+            <li>Optimización y modelado de consultas en base de datos Oracle.</li>
+          </ul>
+        `,
+        technologies: ['Java', 'APX', 'LRBA']
+      }
+    ]
   },
   {
     company: 'Minsait',
@@ -398,6 +441,15 @@ const experiences = ref([
   justify-content: center;
 }
 
+.client-logo-group {
+  gap: 1rem;
+}
+
+.client-logo-group .logo {
+  max-width: 62px;
+  max-height: 42px;
+}
+
 .logo {
   max-height: 52px;
   max-width: 130px;
@@ -484,6 +536,39 @@ const experiences = ref([
   margin: 0;
   font-size: 1.4rem;
   color: #ffffff;
+}
+
+.project-detail + .project-detail {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.project-header h4 {
+  margin: 0;
+  color: #f8fafc;
+  font-size: 1rem;
+}
+
+.project-role {
+  margin: 0.25rem 0 0;
+  color: #94a3b8;
+  font-size: 0.875rem;
+}
+
+.project-period {
+  flex-shrink: 0;
+  color: #38bdf8;
+  font-family: monospace;
+  font-size: 0.8rem;
 }
 
 .subtitle {
